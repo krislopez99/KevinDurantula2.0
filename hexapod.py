@@ -309,6 +309,8 @@ def main():
     hexapod = Hexapod(q)
     hexapod.start()
 
+    # hexapod.cmd_handler("standby:") # This function calls strings to be handled
+
 
 if __name__ == '__main__':
     main()

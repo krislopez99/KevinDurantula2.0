@@ -6,8 +6,8 @@ def mapNum(value, fromLow, fromHigh, toLow, toHigh):
 
 class Leg:
     def __init__(self,
-                controller,
                 id,
+                controller,
                 junction_servos,
                 correction=[0, 0, 0],
                 scale=[1, 1, 1],
@@ -25,7 +25,7 @@ class Leg:
             [set_angle, self.constraint[junction][0]+self.correction[junction], 0])
         
         new_ang = mapNum(set_angle, 0, 180, 0, 1000)
-        self.controller.moveServo(self.junction_servos[junction], new_ang)
+        self.controller.moveServo(self.junction_servos[junction], int(new_ang))
 
     def move_junctions(self, angles):
         self.set_angle(0, angles[0])
