@@ -8,7 +8,7 @@ import numpy as np
 import time
 import json
 
-class Hexapod:
+class Hexapod(Thread):
     CMD_STANDBY = 'standby'
     CMD_LAYDOWN = 'laydown'
 
@@ -41,9 +41,10 @@ class Hexapod:
     CMD_CALIBRATION = 'calibration'
     CMD_NORMAL = 'normal'
 
-    def __init__(self):
+    def __init__(self, in_cmd_queue):
+        Thread.__init__(self)
 
-        self.cmd_queue = Queue()
+        self.cmd_queue = in_cmd_queue
         self.interval = 0.005
 
         self.calibration_mode = False
@@ -89,7 +90,7 @@ class Hexapod:
                 [16, 17, 18],
                 correction=self.config.get('leg5Offset', [0, 0, 0]))]
 
-        self.standby_posture = self.gen_posture(60, 40)
+        self.standby_posture = self.gen_posture(60, 75)
 
         self.current_motion = self.standby_posture
 
@@ -304,12 +305,20 @@ class Hexapod:
 
 
 def main():
-    hexapod = Hexapod()
+    q = Queue()
+    hexapod = Hexapod(q)
+    hexapod.start()
 
-    # hexapod.cmd_dict[hexapod.CMD_WALK_0]
-    path = gen_walk_path(hexapod.standby_posture['coord'], direction=0)
-    # print(path['coord'])
-    hexapod.move(path['coord'])
-    hexapod.run()
+    print("Starting command walk")
+    time.sleep(2)
+
+    q.put('walk0:')
+    time.sleep(2)
+    q.put('standby:')
+
+
+    # hexapod.cmd_handler("standby:") # This function calls strings to be handled
+
+
 if __name__ == '__main__':
     main()
