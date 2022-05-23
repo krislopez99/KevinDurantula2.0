@@ -1,4 +1,5 @@
 import numpy as np
+from time import sleep
 from lx16a_controller import LX16A_BUS
 
 def mapNum(value, fromLow, fromHigh, toLow, toHigh):
@@ -26,6 +27,8 @@ class Leg:
         
         new_ang = mapNum(set_angle, 0, 180, 0, 1000)
         self.controller.moveServo(self.junction_servos[junction], int(new_ang))
+        sleep(0.01)
+
 
     def move_junctions(self, angles):
         self.set_angle(0, angles[0])

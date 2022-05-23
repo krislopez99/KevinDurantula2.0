@@ -67,27 +67,27 @@ class Hexapod(Thread):
         self.legs = [
             # front right
             Leg(0, self.controller,
-                [1, 2, 3],
+                [1,2,3],
                 correction=self.config.get('leg0Offset', [0, 0, 0])),
             # center right
             Leg(1, self.controller,
-                [4, 5, 6],
+                [4,5,6],
                 correction=self.config.get('leg1Offset', [0, 0, 0])),
             # rear right
             Leg(2, self.controller,
-                [7, 8, 9],
+                [7,8,9],
                 correction=self.config.get('leg2Offset', [0, 0, 0])),
             # rear left
             Leg(3, self.controller,
-                [10, 11, 12],
+                [10,11,12],
                 correction=self.config.get('leg3Offset', [0, 0, 0])),
             # center left
             Leg(4, self.controller,
-                [13, 14, 15],
+                [13,14,15],
                 correction=self.config.get('leg4Offset', [0, 0, 0])),
             # front left
             Leg(5, self.controller,
-                [16, 17, 18],
+                [16,17,18],
                 correction=self.config.get('leg5Offset', [0, 0, 0]))]
 
         self.standby_posture = self.gen_posture(60, 75)
@@ -293,8 +293,10 @@ class Hexapod(Thread):
             try:
                 cmd_string = self.cmd_queue.get(block=False)
             except Empty:
+                # print("Empty exception called")
                 pass
             else:
+                print("Else func in run() called")
                 self.cmd_handler(cmd_string)
 
             if not self.calibration_mode:
@@ -311,14 +313,14 @@ def main():
 
     print("Starting command walk")
     time.sleep(2)
-
+    
+    # for i in range(0,10):
     q.put('walk0:')
-    time.sleep(2)
-    q.put('standby:')
-
+    print("walk0 command completed")
+    time.sleep(0.1)
+    # q.put('standby:')
 
     # hexapod.cmd_handler("standby:") # This function calls strings to be handled
-
 
 if __name__ == '__main__':
     main()
