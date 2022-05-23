@@ -49,7 +49,7 @@ class Hexapod(Thread):
 
         self.calibration_mode = False
 
-        with open('config.json', 'r') as read_file:
+        with open('kevinConfig.json', 'r') as read_file:
             self.config = json.load(read_file)
 
         self.mount_x = np.array(self.config['legMountX'])
@@ -90,7 +90,7 @@ class Hexapod(Thread):
                 [16,17,18],
                 correction=self.config.get('leg5Offset', [0, 0, 0]))]
 
-        self.standby_posture = self.gen_posture(60, 75)
+        self.standby_posture = self.gen_posture(65, 50)
 
         self.current_motion = self.standby_posture
 
@@ -315,9 +315,9 @@ def main():
     time.sleep(2)
     
     # for i in range(0,10):
-    q.put('walk0:')
-    print("walk0 command completed")
-    time.sleep(0.1)
+    # q.put('walk0:')
+    # print("walk0 command completed")
+    # time.sleep(0.1)
     # q.put('standby:')
 
     # hexapod.cmd_handler("standby:") # This function calls strings to be handled

@@ -1,4 +1,5 @@
 import numpy as np
+from math import isnan
 from time import sleep
 from lx16a_controller import LX16A_BUS
 
@@ -20,7 +21,7 @@ class Leg:
         self.controller = controller
 
         self.curr_ang_rec = 0
-        self.ang_rec_max = 50
+        self.ang_rec_max = 100
 
     def set_angle(self, junction, angle):
         if self.curr_ang_rec == self.ang_rec_max:
@@ -30,9 +31,12 @@ class Leg:
                 [set_angle, self.constraint[junction][0]+self.correction[junction], 0])
             
             new_ang = mapNum(set_angle, 0, 180, 0, 1000)
-            self.controller.moveServo(self.junction_servos[junction], int(new_ang))
+            if not isnan(new_ang):
+                self.controller.moveServo(self.junction_servos[junction], int(new_ang))
 
-            self.curr_ang_rec = 0
+                self.curr_ang_rec = 0
+            print("memes")
+
         else:
             self.curr_ang_rec += 1
 
