@@ -19,15 +19,22 @@ class Leg:
         self.constraint = constraint
         self.controller = controller
 
+        self.curr_ang_rec = 0
+        self.ang_rec_max = 50
+
     def set_angle(self, junction, angle):
-        set_angle = np.min(
-            [angle+self.correction[junction], self.constraint[junction][1]+self.correction[junction], 180])
-        set_angle = np.max(
-            [set_angle, self.constraint[junction][0]+self.correction[junction], 0])
-        
-        new_ang = mapNum(set_angle, 0, 180, 0, 1000)
-        self.controller.moveServo(self.junction_servos[junction], int(new_ang))
-        sleep(0.01)
+        if self.curr_ang_rec == self.ang_rec_max:
+            set_angle = np.min(
+                [angle+self.correction[junction], self.constraint[junction][1]+self.correction[junction], 180])
+            set_angle = np.max(
+                [set_angle, self.constraint[junction][0]+self.correction[junction], 0])
+            
+            new_ang = mapNum(set_angle, 0, 180, 0, 1000)
+            self.controller.moveServo(self.junction_servos[junction], int(new_ang))
+
+            self.curr_ang_rec = 0
+        else:
+            self.curr_ang_rec += 1
 
 
     def move_junctions(self, angles):
